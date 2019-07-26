@@ -57,21 +57,42 @@ class Tree:
             for child in node.children:
                 self.display(child)
 
-    def pathToNode(self, root, node, path=None):
-        if path==None:
-            path=[]
-        if root.children==[]:
-            return 
-        if node in root.children:
-            path.append(root.data)
-            return path
+    def pathToNode(self, root, node, pathDict=None):
+        if pathDict==None:
+            pathDict={
+                "path": [],
+                "found": False
+            }
+        pathDict["path"].append(root.data)
+        if root == node:
+            pathDict["found"] = True
+            return pathDict["path"]
+        if pathDict["found"]:
+            return pathDict["path"]
+        elif root.children==[]:
+            pathDict["path"].pop()
+            return pathDict["path"]
+        elif node in root.children:
+            pathDict["found"] = True
+            return pathDict["path"]
         else:
             for iter_node in root.children:
-                iter_path = iter_node.data
-                self.pathToNode(iter_node, node, iter_path)
+                if not pathDict["found"]:
+                    finalPath = self.pathToNode(iter_node, node, pathDict)
+            return finalPath
         
+    def lca(self, node1, node2):
+        path1 = self.pathToNode(self.rootNode, node1)
+        path2 = self.pathToNode(self.rootNode, node2)
+        for nodeElement1 in path1[::-1]:
+            for nodeElement2 in path2[::-1]:
+                if(nodeElement2 == nodeElement1):
+                    return nodeElement1
 
 
 uber = Tree()
 uber.create()
 uber.display(uber.rootNode)
+print(uber.pathToNode(uber.rootNode, uber.rootNode.children[0].children[1].children[0]))
+print(uber.pathToNode(uber.rootNode, uber.rootNode.children[0].children[2]))
+print(uber.lca(uber.rootNode.children[0].children[1].children[0], uber.rootNode.children[0].children[2]))
