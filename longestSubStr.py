@@ -1,3 +1,4 @@
+#Longest sub string without repetition
 def lss(mainStr):
     maxLength = 1
     previous = []
