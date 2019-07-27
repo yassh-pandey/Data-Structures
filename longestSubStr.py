@@ -1,6 +1,9 @@
 #Longest sub string without repetition
 def lss(mainStr):
-    maxLength = 1
+    if len(mainStr): 
+        maxLength = 1
+    else:
+        maxLength = 0
     previous = []
     for position, char in enumerate(mainStr):
         previous.append(char)
